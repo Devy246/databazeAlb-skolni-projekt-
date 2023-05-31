@@ -23,11 +23,15 @@ Funkce programu a jejich podfunkce/alternativní verze jsou následující (v po
 - filtr alb
 - vytvoření nového alba
 - výpočet průměrného počtu písní (souhrnný výpočet)
+
+
+nejníže je vždy hlavní funkce, tu přečtěte první pro dokumentaci, podfunkce nad ní většinou fungují velice podobně, takže dokumentace je jen u první z nich
 */
 
 // Tisk alb + alternativní  verze/podfunkce
 void printAlbList(ALBUM listAlb[], int n)
 {
+//vypis cele databaze, for cyklus projde všechny položky
   system("cls");
   for(int i=0 ; i<n; i++)
   {
@@ -37,10 +41,12 @@ void printAlbList(ALBUM listAlb[], int n)
 }
 void singlePrintAlb(ALBUM listAlb, int n)
 {
+//vypis jednoho alba v listu, předem specifikovano
   printf("\n  %d:\n  ALBUM: %s\n  AUTOR: %s\n  ZANR: %s\n  P.PISNI: %d\n  R. VYDANI: %d\n", n, listAlb.nazev, listAlb.autor, listAlb.zanr, listAlb.pocetPisni, listAlb.rokVydani);
 }
 void askSinglePrintAlb(ALBUM listAlb[])
 {
+//vypis jednoho alba, zepta se ktere
   int n;
   system("cls");
   printf("zadejte album z databaze, ktere chcete vytisknout (cislo): ");
@@ -49,6 +55,7 @@ void askSinglePrintAlb(ALBUM listAlb[])
 }
 void printAlbMain(ALBUM listAlb[], int n)
 {
+// fubkce se prve zeptá co zda chcete celou databazi nebo jen jednu věc, switch pak vybere co dělat, default skonci funkci
   int v;
   printf("chcete vytisknout celou databazi, nebo pouze jedno album? \n  1: pouze jedno \n  2: celou databazi \n  else: konec tisku \n  ");
   scanf(" %d", &v);
@@ -64,6 +71,7 @@ void printAlbMain(ALBUM listAlb[], int n)
 // Oprava alba + podfunkce
 void opravaNazvu(ALBUM listAlb[],int n)
 {
+//funkce nacte novy nazev a vymeni ho
   char novyNazev[50];
   printf("\nzadejte novy nazev: ");
   scanf("%s", novyNazev);
@@ -99,6 +107,7 @@ void opravaRoku(ALBUM listAlb[],int n)
 }
 void opravaAlba(ALBUM listAlb[])
 {
+//program se zepta jake album chcete zmenit, vypise ho, a nabidne co chcete delat, switch pote vybere podfunkci ci skonci funkci, podfunkce jsou velice podobne, kouknete se na opravaNazvu
   int n, m;
   printf("Zadejte album, ktere chcete zmenit (cislo): ");
   scanf("%d", &n);
@@ -120,6 +129,7 @@ void opravaAlba(ALBUM listAlb[])
 // Filtr alb + podfunkce
 void filtrNazvu(ALBUM listAlb[], int n)
 {
+//funkce nacte nazev kterym se chce hledat, porovna stringy, a vypise ty ktery se rovnaj
   char filtrNaz[50];
   printf("zadejte nazev, kterym chcete filtrovat: ");
   scanf(" %[^\n]", filtrNaz);
@@ -195,6 +205,7 @@ void filtrRok(ALBUM listAlb[], int n)
 }
 void filtrAlb(ALBUM listAlb[], int n)
 {
+//funkce se zepta, cim chcete filtrovat, pak vybere switch podfunkci. Podfunkce jsou stejne, kouknete se na filtrNazvu
   int m;
   printf("Zadejte parametr, podle ktereho chcete filtrovat alba: \n  1: nazev \n  2: autor \n  3: zanr \n  4: pocet pisni \n  5: rok vydani\n  else: ukoncit filtrovani\n  ");
   scanf("%d", &m);
@@ -214,6 +225,7 @@ void filtrAlb(ALBUM listAlb[], int n)
 // Vytvoření nového alba
 void novyAlbum(ALBUM listAlb[], int n)
 {
+//funkce prida do poctu entit (n) +1, a na tuto pozici v poli prida entitu a nacte hodnoty s printf a scanf
   int pp, rok, m = n;
   char nazev[50];
   char autor[50];
@@ -242,6 +254,7 @@ void novyAlbum(ALBUM listAlb[], int n)
 // Výpočet průměrného počtu písní
 void prumerPocPis(ALBUM listAlb[], int n)
 {
+//funkce secte pocet pisni a vydeli to poctem alb, pak vypise
   float soucet = 0;
   for(int i = 0; i<n ; i++)
   {
