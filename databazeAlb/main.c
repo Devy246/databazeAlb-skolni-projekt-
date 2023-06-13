@@ -5,7 +5,12 @@
 #include <stdbool.h>
 
 /*
-Struktura ALBUM je entita pole listAlb, která je databáze programu. má 5 položek; 3 stringy (nazev, autor a zanr) a 2 inty (rokVydani, pocetPisni)
+Program databaze alb funguje jako pole s 64 prvky struktur ALBUM, 32 už jsou předem vyplněny.
+V funkci main nabízí switch využití různých funkcí pro manipulaci s prvkami poli a jejími hodnotami.
+*/
+
+/*
+Struktura ALBUM je entita pole listAlb, která je databáze programu. má 5 položek; 3 stringy (nazev, autor a zanr) a 2 inty (rokVydani, pocetPisni).
 */
 typedef struct
 {
@@ -20,15 +25,18 @@ typedef struct
 Funkce programu a jejich podfunkce/alternativní verze jsou následující (v pořadí):
 - tisk alb
 - oprava alba
-- filtr alb
+- filtrování listem alb
 - vytvoření nového alba
-- výpočet průměrného počtu písní (souhrnný výpočet)
+- výpočet průměrného počtu písní (pro splnění zadání úkolu mít funkci pro souhrnný výpočet.)
 
-
-nejníže je vždy hlavní funkce, tu přečtěte první pro dokumentaci, podfunkce nad ní většinou fungují velice podobně, takže dokumentace je jen u první z nich
+Ve skupinách funkcí je nejníže hlavní, tu přečtěte první pro dokumentaci.
+Hlavní funkce je volána v main a podfunkce jsou volány hlavní funkcí nebo i jinými funkci.
+Podfunkce se mohou hodně podobat, jelikož častokrát byly okopírovány a byly změněny jen některé části.
 */
 
-// Tisk alb + alternativní  verze/podfunkce
+
+
+// TISK ALB + PODFUNKCE
 void printAlbList(ALBUM listAlb[], int n)
 {
 //vypis cele databaze, for cyklus projde všechny položky
@@ -39,36 +47,37 @@ void printAlbList(ALBUM listAlb[], int n)
   }
 
 }
-void singlePrintAlb(ALBUM listAlb, int n)
+void singlePrintAlb(ALBUM album)
 {
 //vypis jednoho alba v listu, předem specifikovano
-  printf("\n  %d:\n  ALBUM: %s\n  AUTOR: %s\n  ZANR: %s\n  P.PISNI: %d\n  R. VYDANI: %d\n", n, listAlb.nazev, listAlb.autor, listAlb.zanr, listAlb.pocetPisni, listAlb.rokVydani);
+  printf("\n  ALBUM: %s\n  AUTOR: %s\n  ZANR: %s\n  P.PISNI: %d\n  R. VYDANI: %d\n\n", album.nazev, album.autor, album.zanr, album.pocetPisni, album.rokVydani);
 }
-void askSinglePrintAlb(ALBUM listAlb[])
+void printAlbMain(ALBUM databazeAlb[], int n)
 {
-//vypis jednoho alba, zepta se ktere
-  int n;
-  system("cls");
-  printf("zadejte album z databaze, ktere chcete vytisknout (cislo): ");
-  scanf("%d", &n);
-  printf("\n  %d:\n  ALBUM: %s\n  AUTOR: %s\n  ZANR: %s\n  P.PISNI: %d\n  R. VYDANI: %d\n\n", n, listAlb[n].nazev, listAlb[n].autor, listAlb[n].zanr, listAlb[n].pocetPisni, listAlb[n].rokVydani);
-}
-void printAlbMain(ALBUM listAlb[], int n)
-{
-// fubkce se prve zeptá co zda chcete celou databazi nebo jen jednu věc, switch pak vybere co dělat, default skonci funkci
-  int v;
+// funkce se prve zeptá co zda chcete celou databazi nebo jen jednu věc, switch pak vybere co dělat, default skonci funkci
+  int v, m;
   printf("chcete vytisknout celou databazi, nebo pouze jedno album? \n  1: pouze jedno \n  2: celou databazi \n  else: konec tisku \n  ");
   scanf(" %d", &v);
-
   switch(v)
   {
-    case 1: askSinglePrintAlb(listAlb); break;
-    case 2: printAlbList(listAlb, n); break;
-    default: system("cls"); break;
+    case 1:
+      system("cls");
+      printf("zadejte album z databaze, ktere chcete vytisknout (cislo): ");
+      scanf(" %d", &m);
+      singlePrintAlb(databazeAlb[m]);
+      break;
+
+    case 2:
+      printAlbList(databazeAlb, n);
+      break;
+
+    default:
+      system("cls");
+      break;
   }
 }
 
-// Oprava alba + podfunkce
+// OPRAVA ALB + PODFUNKCE
 void opravaNazvu(ALBUM listAlb[],int n)
 {
 //funkce nacte novy nazev a vymeni ho
@@ -107,11 +116,11 @@ void opravaRoku(ALBUM listAlb[],int n)
 }
 void opravaAlba(ALBUM listAlb[])
 {
-//program se zepta jake album chcete zmenit, vypise ho, a nabidne co chcete delat, switch pote vybere podfunkci ci skonci funkci, podfunkce jsou velice podobne, kouknete se na opravaNazvu
+//program se zepta jake album chcete zmenit, vypise ho, a nabidne co chcete delat, switch pote vybere podfunkci ci skonci funkci, podfunkce jsou velice podobne, staci se kouknout na opravaNazvu.
   int n, m;
   printf("Zadejte album, ktere chcete zmenit (cislo): ");
   scanf("%d", &n);
-  singlePrintAlb(listAlb[n],n);
+  singlePrintAlb(listAlb[n]);
   printf("\nCo chcete zmenit? \n  1: nazev \n  2: autora \n  3: zanr \n  4: pocet pisni \n  5: rok vydani\n  else: ukoncit opravu\n  ");
   scanf("%d", &m);
   switch(m)
@@ -126,7 +135,7 @@ void opravaAlba(ALBUM listAlb[])
   system("cls");
 }
 
-// Filtr alb + podfunkce
+// FILTROVANI ALB + PODFUNKCE
 void filtrNazvu(ALBUM listAlb[], int n)
 {
 //funkce nacte nazev kterym se chce hledat, porovna stringy, a vypise ty ktery se rovnaj
@@ -138,7 +147,7 @@ void filtrNazvu(ALBUM listAlb[], int n)
   {
     if( strcmp(listAlb[i].nazev,filtrNaz)==0 )
     {
-      singlePrintAlb(listAlb[i],i);
+      singlePrintAlb(listAlb[i]);
     }
   }
   printf("\n");
@@ -153,7 +162,7 @@ void filtrAutora(ALBUM listAlb[], int n)
   {
     if( strcmp(listAlb[i].autor,filtrAut)==0 )
     {
-      singlePrintAlb(listAlb[i],i);
+      singlePrintAlb(listAlb[i]);
     }
   }
   printf("\n");
@@ -168,7 +177,7 @@ void filtrZanru(ALBUM listAlb[], int n)
   {
     if( strcmp(listAlb[i].zanr,filtrZan)==0 )
     {
-      singlePrintAlb(listAlb[i],i);
+      singlePrintAlb(listAlb[i]);
     }
   }
   printf("\n");
@@ -183,7 +192,7 @@ void filtrPP(ALBUM listAlb[], int n)
   {
     if( m==listAlb[i].pocetPisni)
     {
-      singlePrintAlb(listAlb[i],i);
+      singlePrintAlb(listAlb[i]);
     }
   }
   printf("\n");
@@ -198,14 +207,14 @@ void filtrRok(ALBUM listAlb[], int n)
   {
     if( m==listAlb[i].rokVydani)
     {
-      singlePrintAlb(listAlb[i],i);
+      singlePrintAlb(listAlb[i]);
     }
   }
   printf("\n");
 }
 void filtrAlb(ALBUM listAlb[], int n)
 {
-//funkce se zepta, cim chcete filtrovat, pak vybere switch podfunkci. Podfunkce jsou stejne, kouknete se na filtrNazvu
+  //funkce se zepta, cim chcete filtrovat, pak vybere switch podfunkci. Podfunkce jsou si velmi podobne, staci se kouknout na filtrNazvu
   int m;
   printf("Zadejte parametr, podle ktereho chcete filtrovat alba: \n  1: nazev \n  2: autor \n  3: zanr \n  4: pocet pisni \n  5: rok vydani\n  else: ukoncit filtrovani\n  ");
   scanf("%d", &m);
@@ -222,15 +231,16 @@ void filtrAlb(ALBUM listAlb[], int n)
   }
 }
 
-// Vytvoření nového alba
+// VYTVOŘENÍ NOVÉHO ALBA
 void novyAlbum(ALBUM listAlb[], int n)
 {
-//funkce prida do poctu entit (n) +1, a na tuto pozici v poli prida entitu a nacte hodnoty s printf a scanf
-  int pp, rok, m = n;
+  // funkce nacte do pole novy album pomoci printf a scanf na pozici n. n udava pocet prvku, ale jelikoz pole zacina nulou tak v poli je to prvni prazdna hodnota. pote se da n++ po volani funkce jelikoz nechapu pointery.
+
+  // JA VIM ZE JE TO HNUSNY A NEDAVA TO SMYSL ALE POINTERY JSME SE NEUCILI A TOHLE FUNGUJE
+  int pp, rok;
   char nazev[50];
   char autor[50];
   char zanr[50];
-  n++;
 
   printf("zadejte jmeno noveho alba: ");
   scanf("%s", nazev);
@@ -244,17 +254,18 @@ void novyAlbum(ALBUM listAlb[], int n)
   scanf("%d", &rok);
   system("cls");
 
-  strcpy(listAlb[m].nazev, nazev);
-  strcpy(listAlb[m].autor, autor);
-  strcpy(listAlb[m].zanr, zanr);
-  listAlb[m].pocetPisni = pp;
-  listAlb[m].rokVydani = rok;
+  strcpy(listAlb[n].nazev, nazev);
+  strcpy(listAlb[n].autor, autor);
+  strcpy(listAlb[n].zanr, zanr);
+  listAlb[n].pocetPisni = pp;
+  listAlb[n].rokVydani = rok;
 }
 
-// Výpočet průměrného počtu písní
+// VÝPOČET PRŮMĚRNÉHO POCTU PISNI
 void prumerPocPis(ALBUM listAlb[], int n)
 {
-//funkce secte pocet pisni a vydeli to poctem alb, pak vypise
+  //funkce secte pocet pisni a vydeli to poctem alb, pak vypise
+  //to vsechno s tim co je float a int je blbe ale musi to takhle byt aby to bylo desetinny
   float soucet = 0;
   for(int i = 0; i<n ; i++)
   {
@@ -267,17 +278,20 @@ void prumerPocPis(ALBUM listAlb[], int n)
 // funkce Main
 int main(void)
 {
-  // Int p funguje jako rozhodnutí vypnout program. Jestli ve switchy se zapne default, p se stane 0, a do-while cyklus skončí.
-  int p = 1;
-  // Int r je proměnná pro switch, který dává uživateli navýběr, které funkce chce zkusit.
-  int r;
+  /*
+  použití niže definovaných funkcí je následující:
+  - int konec = funguje jako rozhodnutí vypnout program. Jestli ve switchy se zapne default, p se stane 0, a do-while cyklus ve kterém je switch skončí.
+  - int r  = je proměnná pro switch, který dává uživateli navýběr, které funkce chce zkusit.
+  - int n = funguje jako aktuální počet entit v poli.
+  - char x = char, který je použit pro vizuální šmrnc.
+  */
+  int konec = 0;
+  int rozhodnuti;
   int n = 32;
-  // Int n funguje jako aktuální počet entit v poli.
   char x = 178;
-  // Char, který je použit pro vizuální šmrnc.
 
-  // Definice pole alb, maximální velikost je 64, 32 už tam je.
-  ALBUM listAlb[64] = {
+  //pole databazeAlb je databaze projektu
+  ALBUM databazeAlb[64] = {
     {"...I Care Because You Do","Aphex Twin","ambient",1995,12},
     {"Richard D. James Album","Aphex Twin","ambient",1996,10},
     {"Selected Ambient Works 85-92","Aphex Twin","ambient",1992,13},
@@ -316,45 +330,45 @@ int main(void)
     // Vytisknutí informací a načtení r.
     printf("%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n%c  DATABAZE ALB v0.1  %c\n%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x);
     printf("\nzadejte, co chcete delat: \n  1: zobrazit databazi alb \n  2: pridat album do databaze alb \n  3: opravit album v databazi \n  4: filtrovat databazi \n  5: zjistit prumerny pocet pisni v albech databaze \n  else: ukoncit program \n  ");
-    scanf(" %d", &r);
+    scanf(" %d", &rozhodnuti);
     system("cls");
 
-    // Switch, který u každého casu vymaže konzoli a začne funkci, kdyžtak změní proměnnou.
-    switch(r)
+    // Switch, který u každého kola vymaže konzoli a začne funkci, kdyžtak změní proměnnou.
+    switch(rozhodnuti)
     {
       case 1:
         system("cls");
-        printAlbMain(listAlb,n);
+        printAlbMain(databazeAlb,n);
         break;
 
       case 2:
         system("cls");
-        novyAlbum(listAlb,n);
+        novyAlbum(databazeAlb,n);
         n++;
         break;
 
       case 3:
         system("cls");
-        opravaAlba(listAlb);
+        opravaAlba(databazeAlb);
         break;
 
       case 4:
         system("cls");
-        filtrAlb(listAlb,n);
+        filtrAlb(databazeAlb,n);
         break;
 
       case 5:
         system("cls");
-        prumerPocPis(listAlb,n);
+        prumerPocPis(databazeAlb,n);
         break;
 
       default:
         system("cls");
         printf("...vypinam program sefe...\n");
-        p = 0;
+        konec = 1;
         break;
     }
-  }while(p == 1);
+  }while(konec == 0);
 
   return 0;
 }
